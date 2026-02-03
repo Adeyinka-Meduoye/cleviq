@@ -64,22 +64,23 @@ export class GeminiService {
    */
   private async callWithFallback(params: any, tiers: string[]): Promise<any> {
     let lastError: any = null;
-    
+
     // Canonical models for fallback steps
+    // Replace lines 80-86 with this:
     const fallbackSequence = [
-      tiers[0], // Step 1: User primary choice
-      tiers[1] || 'gemini-3-flash-preview', // Step 2: User secondary or Flash Preview
-      'gemini-flash-latest', // Step 3: Reliable 1.5 Flash
-      'gemini-flash-lite-latest', // Step 4: Low-latency/High-quota Lite
-      'gemini-flash-lite-latest', // Step 5: Retry Lite
-      'gemini-flash-lite-latest'  // Step 6: Final Lite attempt
+      tiers[0], // gemini-3-pro-preview
+      tiers[1] || 'gemini-3-flash-preview',
+      'gemini-3-flash-preview', // Stay on 3 for JSON + Tools support
+      'gemini-3-flash-preview',
+      'gemini-3-flash-preview',
+      'gemini-3-flash-preview'
     ].slice(0, 6);
 
     for (let i = 0; i < fallbackSequence.length; i++) {
       const model = fallbackSequence[i];
       try {
-        console.debug(`[CLEVIQ Tier ${i+1}] Invoking ${model}...`);
-        
+        console.debug(`[CLEVIQ Tier ${i + 1}] Invoking ${model}...`);
+
         const res = await this.ai.models.generateContent({
           ...params,
           model: model,
@@ -89,19 +90,19 @@ export class GeminiService {
         lastError = err;
         const errorMsg = err?.message?.toLowerCase() || "";
         const isQuotaError = errorMsg.includes('quota') || errorMsg.includes('429') || errorMsg.includes('rate limit');
-        
+
         if (isQuotaError) {
-          const waitTime = (i + 1) * 3000; 
-          console.warn(`[CLEVIQ Tier ${i+1}] Rate limit hit. Cooling down for ${waitTime/1000}s...`);
+          const waitTime = (i + 1) * 3000;
+          console.warn(`[CLEVIQ Tier ${i + 1}] Rate limit hit. Cooling down for ${waitTime / 1000}s...`);
           await new Promise(r => setTimeout(r, waitTime));
           continue;
         }
 
         // If it's a 404 or structural, skip to next model
-        console.error(`[CLEVIQ Tier ${i+1}] Error with ${model}:`, err.message);
+        console.error(`[CLEVIQ Tier ${i + 1}] Error with ${model}:`, err.message);
       }
     }
-    
+
     throw new Error(
       `CLEVIQ Orchestration Failure: All 6 fallback tiers were exhausted. ` +
       `Details: ${lastError?.message || 'Connection timeout'}`
@@ -185,7 +186,7 @@ export class GeminiService {
 
     const response = await this.callWithFallback({ contents: prompt, config }, models);
     const courseData = JSON.parse(response.text.trim());
-    courseData.completedLessonIds = []; 
+    courseData.completedLessonIds = [];
     return courseData;
   }
 
