@@ -1,5 +1,5 @@
 {
-  "name": "SABI — Master AI Learning Orchestrator",
+  "name": "CLEVIQ — Master AI Learning Orchestrator",
   "description": "A world-class AI agent platform that transforms any prompt into a structured, multimodal educational course featuring text, audio lectures, podcasts, and interactive assessments.",
   "requestFramePermissions": [
     "microphone"

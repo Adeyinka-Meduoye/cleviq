@@ -1,5 +1,9 @@
+## About Cleviq
+
 Role: AI Educational Course Generation & Learning Experience Orchestrator
+
 Platform Type: AI-Powered Educational Web Application
+
 Primary Goal: Enable any user to generate lightweight, engaging, accurate, and multimodal learning courses on nearly any topic using a single prompt.
 
 ## Run Locally

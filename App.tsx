@@ -24,7 +24,7 @@ export default function App() {
 
   // Load library from local storage
   useEffect(() => {
-    const saved = localStorage.getItem('sabi_library');
+    const saved = localStorage.getItem('cleviq_library');
     if (saved) {
       try {
         setLibrary(JSON.parse(saved));
@@ -67,7 +67,7 @@ export default function App() {
   const saveToLibrary = (courseToSave: Course) => {
     const updatedLibrary = [courseToSave, ...library.filter(c => c.id !== courseToSave.id)];
     setLibrary(updatedLibrary);
-    localStorage.setItem('sabi_library', JSON.stringify(updatedLibrary));
+    localStorage.setItem('cleviq_library', JSON.stringify(updatedLibrary));
   };
 
   const handleProgressUpdate = (updatedCourse: Course) => {

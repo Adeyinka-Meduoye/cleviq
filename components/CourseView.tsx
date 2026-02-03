@@ -15,10 +15,10 @@ export const CourseView: React.FC<Props> = ({ course, onSave, onProgressUpdate }
   const [isSaved, setIsSaved] = useState(false);
   const [showCompletionPopup, setShowCompletionPopup] = useState(false);
 
-  // Synchronize state if the course prop changes
+  // CRITICAL: Synchronize state whenever the course object updates (includes progress persistence)
   useEffect(() => {
     setCompletedLessons(new Set(course.completedLessonIds || []));
-  }, [course.id]);
+  }, [course]);
 
   // Flatten lessons for easier navigation
   const allLessons = useMemo(() => {

@@ -60,23 +60,23 @@ export class GeminiService {
 
   /**
    * Enhanced 6-Tier Fallback Request Strategy
-   * Specifically tuned for the strict RPM/TPM limits of the Gemini Free Tier.
+   * Corrected model names to match the supported Google Gemini API list.
    */
   private async callWithFallback(params: any, tiers: string[]): Promise<any> {
     let lastError: any = null;
     
-    // Expand tiers to exactly 6 logical steps (models + retries)
-    const effectiveTiers = [
-      tiers[0], // Primary
-      tiers[1] || tiers[0], // Secondary
-      tiers[2] || tiers[1] || tiers[0], // Tertiary
-      'gemini-2.5-flash-lite-latest', // High availability tier
-      tiers[0], // Retry primary after potential cooldown
-      'gemini-2.5-flash-lite-latest'  // Final fallback
+    // Canonical models for fallback steps
+    const fallbackSequence = [
+      tiers[0], // Step 1: User primary choice
+      tiers[1] || 'gemini-3-flash-preview', // Step 2: User secondary or Flash Preview
+      'gemini-flash-latest', // Step 3: Reliable 1.5 Flash
+      'gemini-flash-lite-latest', // Step 4: Low-latency/High-quota Lite
+      'gemini-flash-lite-latest', // Step 5: Retry Lite
+      'gemini-flash-lite-latest'  // Step 6: Final Lite attempt
     ].slice(0, 6);
 
-    for (let i = 0; i < effectiveTiers.length; i++) {
-      const model = effectiveTiers[i];
+    for (let i = 0; i < fallbackSequence.length; i++) {
+      const model = fallbackSequence[i];
       try {
         console.debug(`[CLEVIQ Tier ${i+1}] Invoking ${model}...`);
         
@@ -91,21 +91,19 @@ export class GeminiService {
         const isQuotaError = errorMsg.includes('quota') || errorMsg.includes('429') || errorMsg.includes('rate limit');
         
         if (isQuotaError) {
-          // Tiered Backoff: Wait longer as we fail more
           const waitTime = (i + 1) * 3000; 
           console.warn(`[CLEVIQ Tier ${i+1}] Rate limit hit. Cooling down for ${waitTime/1000}s...`);
           await new Promise(r => setTimeout(r, waitTime));
           continue;
         }
-        
-        // If it's a safety or structural error, move to next model immediately
-        console.error(`[CLEVIQ Tier ${i+1}] Technical error:`, err.message);
+
+        // If it's a 404 or structural, skip to next model
+        console.error(`[CLEVIQ Tier ${i+1}] Error with ${model}:`, err.message);
       }
     }
     
     throw new Error(
-      `CLEVIQ Orchestration Quota Error: All 6 fallback tiers were exhausted. ` +
-      `Gemini API is currently heavily restricted. Please wait 60 seconds and try again. ` +
+      `CLEVIQ Orchestration Failure: All 6 fallback tiers were exhausted. ` +
       `Details: ${lastError?.message || 'Connection timeout'}`
     );
   }
@@ -118,13 +116,13 @@ export class GeminiService {
     const models = [
       'gemini-3-pro-preview',
       'gemini-3-flash-preview',
-      'gemini-2.5-flash-latest'
     ];
 
     const prompt = `Generate a structured educational course about "${topic}". 
     Level: ${skillLevel}. Format Preference: ${format}.
     
-    CONTENT STYLE: Use a professional yet vibrant "Nigerian Storytelling" approach. Use Nigerian English expressions like "Oya", "Chai", or "Abeg" sparingly but effectively in audio scripts.
+    CONTENT STYLE: Use a professional yet vibrant "Nigerian Storytelling" approach. 
+    Use Nigerian English expressions like "Oya", "Chai", or "Abeg" sparingly but effectively in audio scripts.
     
     OUTPUT: Valid JSON matching the schema.`;
 
@@ -192,15 +190,7 @@ export class GeminiService {
   }
 
   async generateTTS(text: string, voiceName: 'Kore' | 'Puck' | 'Charon' | 'Fenrir' = 'Kore'): Promise<AudioBuffer> {
-    // 6-tier Strategy for TTS fallback:
-    const models = [
-      "gemini-2.5-flash-preview-tts",
-      "gemini-2.5-flash-preview-tts",
-      "gemini-2.5-flash-preview-tts",
-      "gemini-2.5-flash-native-audio-preview-12-2025",
-      "gemini-2.5-flash-native-audio-preview-12-2025",
-      "gemini-2.5-flash-native-audio-preview-12-2025"
-    ];
+    const models = ["gemini-2.5-flash-preview-tts"];
 
     const params = {
       contents: [{ parts: [{ text: `Generate audio for the following script in a warm Nigerian accent: ${text}` }] }],
