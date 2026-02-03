@@ -123,7 +123,7 @@ export default function App() {
                   <textarea
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="e.g., The history of Nigerian art, How blockchain works..."
+                    placeholder="I want to master..."
                     className="w-full h-32 px-6 py-5 rounded-3xl border-2 border-slate-800 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-950/30 bg-slate-900 text-slate-100 font-medium text-lg resize-none shadow-xl transition-all placeholder:text-slate-600 outline-none"
                   />
                 </div>
