@@ -114,9 +114,9 @@ export default function App() {
           <div className="max-w-4xl mx-auto mt-12">
             <div className="text-center mb-12">
               <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-4 animate-text-gradient">CLEVIQ — The Future of Learning</p>
-              <h2 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
+              <h3 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">
                 What do you want to <span className="animate-text-gradient">Master</span> Today.
-              </h2>
+              </h3>
               <p className="text-slate-400 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
                 Transform any concept into a world-class, multi-modal learning experience in minutes.
               </p>
