@@ -134,12 +134,12 @@ export class GeminiService {
    */
   private async callWithFallback(params: any): Promise<string> {
     const tiers: TierConfig[] = [
-      { provider: 'groq', model: 'llama-3.3-70b-versatile' },  // Tier 1: Groq High-End
-      { provider: 'gemini', model: 'gemini-3-pro-preview' },   // Tier 2: Gemini Pro
-      { provider: 'openai', model: 'gpt-4o' },                // Tier 3: OpenAI GPT-4o
-      { provider: 'groq', model: 'llama-3.1-8b-instant' },     // Tier 4: Groq Instant
-      { provider: 'gemini', model: 'gemini-3-flash-preview' }, // Tier 5: Gemini Flash
-      { provider: 'openai', model: 'gpt-4o-mini' }            // Tier 6: OpenAI GPT-4o-mini
+      { provider: 'groq', model: 'llama-3.3-70b-versatile' },  
+      { provider: 'gemini', model: 'gemini-3-pro-preview' },   
+      { provider: 'openai', model: 'gpt-4o' },                
+      { provider: 'groq', model: 'llama-3.1-8b-instant' },     
+      { provider: 'gemini', model: 'gemini-3-flash-preview' }, 
+      { provider: 'openai', model: 'gpt-4o-mini' }            
     ];
 
     let lastError: any = null;
@@ -153,15 +153,12 @@ export class GeminiService {
         lastError = err;
         const msg = err.message.toLowerCase();
         
-        // Handle Quota/Rate Limit (429) specifically
         if (msg.includes('quota') || msg.includes('429') || msg.includes('limit') || msg.includes('exhausted')) {
           console.warn(`[CLEVIQ Orchestrator] Tier ${i + 1} (${tier.provider}) rate limit exceeded. Falling back...`);
-          // Exponential wait to give the provider a chance to recover
           await new Promise(r => setTimeout(r, (i + 1) * 1500));
           continue;
         }
 
-        // Handle 404/Not Found
         if (msg.includes('not found') || msg.includes('404')) {
           console.error(`[CLEVIQ Orchestrator] Tier ${i + 1} model unavailable. Skipping.`);
           continue;
@@ -171,7 +168,7 @@ export class GeminiService {
       }
     }
 
-    throw new Error(`CLEVIQ Master AI System Failure: All 6 fallback tiers (Groq, Gemini, OpenAI) were exhausted. Last Error: ${lastError?.message}`);
+    throw new Error(`CLEVIQ Master AI System Failure: All 6 fallback tiers were exhausted. Last Error: ${lastError?.message}`);
   }
 
   async generateCourse(
@@ -179,11 +176,11 @@ export class GeminiService {
     skillLevel: SkillLevel = SkillLevel.BEGINNER,
     format: CourseFormat = CourseFormat.MIXED
   ): Promise<Course> {
-    const prompt = `Generate a structured educational course about "${topic}". 
-    Level: ${skillLevel}. Format Preference: ${format}.
+    const prompt = `Generate a structured, world-class educational course about "${topic}". 
+    Target Skill Level: ${skillLevel}. 
     
-    CONTENT STYLE: Use a professional yet vibrant "Nigerian Storytelling" approach. 
-    Use Nigerian English expressions like "Oya", "Chai", or "Abeg" sparingly but effectively in audio scripts.
+    CONTENT STYLE: Use a globally-professional, highly engaging, and clear storytelling approach. 
+    Explain complex concepts with clarity and precision, ensuring the content is accessible and relevant to a diverse international audience.
     
     IMPORTANT: You must return the response strictly as a JSON object matching this schema:
     {
@@ -203,9 +200,9 @@ export class GeminiService {
               "title": "string",
               "content": "string (markdown)",
               "summary": "string",
-              "imagePrompt": "string",
-              "audioScript": "string",
-              "podcastScript": "string",
+              "imagePrompt": "string (high quality visual prompt)",
+              "audioScript": "string (professional narration script)",
+              "podcastScript": "string (engaging multi-host dialogue)",
               "quiz": [
                 {
                   "question": "string",
@@ -234,9 +231,8 @@ export class GeminiService {
   }
 
   async generateTTS(text: string, voiceName: 'Kore' | 'Puck' | 'Charon' | 'Fenrir' = 'Kore'): Promise<AudioBuffer> {
-    // TTS is currently exclusive to Gemini as specialized modality
     const params = {
-      contents: [{ parts: [{ text: `Generate audio for the following script in a warm Nigerian accent: ${text}` }] }],
+      contents: [{ parts: [{ text: `Generate high-quality audio for the following script in a clear, professional, and friendly neutral accent: ${text}` }] }],
       config: {
         responseModalities: [Modality.AUDIO],
         speechConfig: {
@@ -247,10 +243,8 @@ export class GeminiService {
       },
     };
 
-    // We still use fallback logic but restrict to Gemini models that support TTS
     const models = ["gemini-2.5-flash-preview-tts"];
     
-    // For TTS, we wrap the Gemini SDK call
     let lastErr;
     for (const model of models) {
       try {
@@ -265,7 +259,7 @@ export class GeminiService {
         lastErr = e;
       }
     }
-    throw lastErr || new Error("TTS generation failed");
+    throw lastErr || new Error("Global TTS generation failed");
   }
 }
 

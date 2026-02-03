@@ -11,7 +11,7 @@ interface Props {
   nextLesson: Lesson | null;
   onNext: (lesson: Lesson) => void;
   isCompleted: boolean;
-  overallProgressPercent?: number; // Receive real progress
+  overallProgressPercent?: number; 
 }
 
 export const LessonView: React.FC<Props> = ({ 
@@ -27,7 +27,6 @@ export const LessonView: React.FC<Props> = ({
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    // CRITICAL: Reset the view to the beginning of the lesson (Reading tab) when the lesson changes
     setActiveTab('text');
   }, [lesson]);
 
@@ -43,12 +42,12 @@ export const LessonView: React.FC<Props> = ({
           className="flex items-center gap-2 text-indigo-400 font-bold hover:text-indigo-300 transition-all"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
-          Back to Curriculum
+          Curriculum Overview
         </button>
         {isCompleted && (
            <span className="bg-green-500/10 text-green-400 border border-green-500/20 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest flex items-center gap-2">
              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-             Lesson Completed
+             Topic Mastered
            </span>
         )}
       </div>
@@ -60,10 +59,10 @@ export const LessonView: React.FC<Props> = ({
             {/* Header / Tabs */}
             <div className="border-b border-slate-800 flex overflow-x-auto bg-slate-950/40">
               {[
-                { id: 'text', label: 'Reading', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' },
-                { id: 'audio', label: 'Lecture', icon: 'M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z' },
-                { id: 'podcast', label: 'Podcast', icon: 'M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z' },
-                { id: 'quiz', label: 'Assessment', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4' }
+                { id: 'text', label: 'Study Guide', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' },
+                { id: 'audio', label: 'Audio Lecture', icon: 'M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z' },
+                { id: 'podcast', label: 'Insight Podcast', icon: 'M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z' },
+                { id: 'quiz', label: 'Verification', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4' }
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -102,7 +101,7 @@ export const LessonView: React.FC<Props> = ({
                       onClick={() => setActiveTab('audio')}
                       className="px-8 py-4 bg-indigo-950/50 border border-indigo-500/30 text-indigo-400 rounded-2xl font-bold hover:bg-indigo-900 transition-all flex items-center gap-3"
                     >
-                      Continue to Lecture
+                      Listen to Lecture
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7-7 7" /></svg>
                     </button>
                   </div>
@@ -114,9 +113,9 @@ export const LessonView: React.FC<Props> = ({
                   <div className="bg-indigo-950/50 border border-indigo-900/50 p-10 rounded-[3rem] inline-block mb-10 shadow-2xl">
                     <svg className="w-20 h-20 text-indigo-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
                   </div>
-                  <h3 className="text-3xl font-black text-white mb-4">Single-Host Lecture</h3>
+                  <h3 className="text-3xl font-black text-white mb-4">Core Lecture</h3>
                   <p className="text-slate-400 mb-10 max-w-md mx-auto leading-relaxed">
-                    Listen to a professional academic lecture covering the core concepts of this lesson with a rhythmic Nigerian flow.
+                    A professional academic overview covering the critical concepts of this topic with high-fidelity narration.
                   </p>
                   <AudioPlayer script={lesson.audioScript} voice="Kore" />
                   <div className="mt-12 flex justify-center">
@@ -124,7 +123,7 @@ export const LessonView: React.FC<Props> = ({
                       onClick={() => setActiveTab('podcast')}
                       className="px-8 py-3 text-slate-400 hover:text-white transition-all font-bold flex items-center gap-2"
                     >
-                      Skip to Podcast
+                      Listen to Podcast Discussion
                     </button>
                   </div>
                 </div>
@@ -135,9 +134,9 @@ export const LessonView: React.FC<Props> = ({
                   <div className="bg-purple-950/50 border border-purple-900/50 p-10 rounded-[3rem] inline-block mb-10 shadow-2xl">
                     <svg className="w-20 h-20 text-purple-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
                   </div>
-                  <h3 className="text-3xl font-black text-white mb-4">Conversational Podcast</h3>
+                  <h3 className="text-3xl font-black text-white mb-4">Deep-Dive Podcast</h3>
                   <p className="text-slate-400 mb-10 max-w-md mx-auto leading-relaxed">
-                    Enjoy a lively deep-dive conversation between two hosts as they break down this topic in an engaging Nigerian style.
+                    An engaging, multi-perspective conversation exploring practical applications and advanced insights.
                   </p>
                   <AudioPlayer 
                     script={lesson.podcastScript || lesson.audioScript} 
@@ -148,7 +147,7 @@ export const LessonView: React.FC<Props> = ({
                       onClick={() => setActiveTab('quiz')}
                       className="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-black hover:bg-indigo-500 transition-all shadow-xl"
                     >
-                      Take Assessment
+                      Start Assessment
                     </button>
                   </div>
                 </div>
@@ -171,13 +170,13 @@ export const LessonView: React.FC<Props> = ({
         {/* Sidebar Summary */}
         <div className="w-full md:w-80 order-1 md:order-2 space-y-6">
           <div className="glass-card p-6 rounded-[2rem] sticky top-24 border-slate-800 shadow-xl">
-            <h4 className="font-black text-white text-sm uppercase tracking-widest mb-6 border-b border-slate-800 pb-4">Quick Summary</h4>
+            <h4 className="font-black text-white text-sm uppercase tracking-widest mb-6 border-b border-slate-800 pb-4">Executive Summary</h4>
             <p className="text-sm text-slate-300 leading-relaxed bg-slate-950/60 p-5 rounded-2xl italic border border-slate-800">
               "{lesson.summary}"
             </p>
             <div className="mt-8">
                <div className="flex justify-between text-[10px] font-black text-slate-500 mb-3 uppercase tracking-widest">
-                 <span>Course Progress</span>
+                 <span>Mastery Progress</span>
                  <span className="text-indigo-400">{overallProgressPercent}%</span>
                </div>
                <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
@@ -189,7 +188,7 @@ export const LessonView: React.FC<Props> = ({
                 onClick={() => onNext(nextLesson)}
                 className="w-full mt-8 py-4 bg-indigo-950/50 border border-indigo-500/30 text-indigo-400 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-indigo-900 transition-all"
               >
-                Next Lesson
+                Proceed to Next Topic
               </button>
             )}
           </div>
