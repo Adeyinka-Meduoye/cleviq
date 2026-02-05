@@ -94,9 +94,9 @@ export default function App() {
       <header className="sticky top-0 z-50 glass-card px-6 py-4 flex justify-between items-center border-b border-slate-800">
         <div className="flex items-center" onClick={handleReset} style={{ cursor: 'pointer' }}>
           <img 
-            src="/images/logo.png" 
+            src="/images/cleviq-trans-logo.png" 
             alt="CLEVIQ Logo" 
-            className="w-15 h-9 object-contain"
+            className="w-100 h-12 object-contain"
             onError={(e) => {
               // Fallback to the original SVG path data via a data URI if the file isn't found
               e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%236366F1'/%3E%3Cpath d='M35 50 C35 35 45 35 50 35 C55 35 65 35 65 50 L56 50 C56 44 53 42 50 42 C47 42 44 44 44 50 C44 56 47 58 50 58 C53 58 56 56 56 50 L65 50 C65 65 55 65 50 65 C45 65 35 65 35 50 Z' fill='white'/%3E%3C/svg%3E";
