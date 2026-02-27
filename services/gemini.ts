@@ -135,7 +135,7 @@ export class GeminiService {
   private async callWithFallback(params: any): Promise<string> {
     const tiers: TierConfig[] = [
       { provider: 'groq', model: 'llama-3.3-70b-versatile' },  
-      { provider: 'gemini', model: 'gemini-3-pro-preview' },   
+      { provider: 'gemini', model: 'gemini-3.1-pro-preview' },   
       { provider: 'openai', model: 'gpt-4o' },                
       { provider: 'groq', model: 'llama-3.1-8b-instant' },     
       { provider: 'gemini', model: 'gemini-3-flash-preview' }, 
